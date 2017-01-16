@@ -90,10 +90,11 @@ namespace AdaptableQuesting
             {
                 string command = text.Substring(1);
 
-                // Clears all invalid quests in the players' currentQuest array.
-                if (command.ToLower() == "clearinvalidquests")
+				var qp = Main.LocalPlayer.GetModPlayer<QuestPlayer>(this);
+
+				// Clears all invalid quests in the players' currentQuest array.
+				if (command.ToLower() == "clearinvalidquests")
                 {
-                    QuestPlayer qp = Main.player[Main.myPlayer].GetModPlayer<QuestPlayer>(this);
                     for (int i = 0; i < qp.currentQuests.Length; ++i)
                     {
                         if (qp.currentQuests[i].invalid)
@@ -102,8 +103,6 @@ namespace AdaptableQuesting
                 }
                 if (command.ToLower() == "clearactivequests")
                 {
-                    QuestPlayer qp = Main.player[Main.myPlayer].GetModPlayer<QuestPlayer>(this);
-
                     try
                     {
                         for (int i = 0; i < qp.currentQuests.Length; ++i)
@@ -122,7 +121,6 @@ namespace AdaptableQuesting
                 }
                 if (command.ToLower() == "clearcompletedquests")
                 {
-                    QuestPlayer qp = Main.player[Main.myPlayer].GetModPlayer<QuestPlayer>(this);
                     qp.completedQuests = "";
                 }
             }

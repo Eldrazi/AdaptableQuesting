@@ -10,12 +10,13 @@ using Terraria.ID;
 using Terraria.ModLoader;
 
 using AdaptableQuesting.Entities;
+using AdaptableQuesting.Interfaces;
 
 namespace AdaptableQuesting.Quests
 {
     public delegate bool QuestDelegate(Player p);
 
-    public class Quest : IQuest
+    public class Quest : IQuest, ICloneable
     {
         /// <summary>
         /// Only true when a quest is invalid. Happens when a mod is still active in the players' quest list,
@@ -45,12 +46,9 @@ namespace AdaptableQuesting.Quests
         public int introNPC;
         public Conversation introConversation;
 
-        public QuestStage CurrentStageObject
-        {
-            get { return this.Stages[this.CurrentStage]; }
-        }
+        public QuestStage CurrentStageObject => this.Stages[this.CurrentStage];
 
-        public Quest(string id, string name, string modName, string description)
+	    public Quest(string id, string name, string modName, string description)
         {
             this.invalid = false;
             this.isActive = false;
@@ -66,6 +64,7 @@ namespace AdaptableQuesting.Quests
 
             this.questCompleted = null;
         }
+
         public Quest Copy()
         {
             return this.MemberwiseClone() as Quest;
@@ -163,111 +162,10 @@ namespace AdaptableQuesting.Quests
                 }
             }
         }
-    }
 
-    public class QuestStage
-    {
-        public string description;
-
-        public Dictionary<int, Conversation> conversations; // List of all conversations, keys are NPC types.
-        
-        /// <summary>
-        /// Holds all the items needed to complete the quest part.
-        /// [0] is the ID of the item, [1] is the amount needed.
-        /// </summary>
-        public QuestNeedElement itemsNeeded;
-        /// <summary>
-        /// Holds all the kills that are needed to complete the quest part.
-        /// [0] is the ID of the NPCs, [1] is the amount of kills needed.
-        /// </summary>
-        public QuestNeedElement killsNeeded;
-
-        public string partUnfinishedText;
-        public QuestDelegate partUnfinishedCheck;
-
-        public QuestStage(string description)
-        {
-            this.description = description;
-
-            conversations = new Dictionary<int, Conversation>();
-
-            itemsNeeded = new QuestNeedElement();
-            killsNeeded = new QuestNeedElement();
-        }
-
-        public void AddItemNeeded(int type, int amount)
-        {
-            itemsNeeded.Add(new QuestPartElement(type, amount));
-        }
-        public void AddKillNeeded(int netID, int amount, string typesName = "", params int[] types)
-        {
-            killsNeeded.Add(new QuestPartElement(netID, amount, typesName, types));
-        }
-
-        public void AddConversation(int npcType, Conversation conversation)
-        {
-            conversations.Add(npcType, conversation);
-        }
-    }
-    public class Conversation
-    {
-        public int currentConvPart = 0;
-        
-        public List<ConversationPart> conversationParts;
-
-        public ConversationPart CurrentPart
-        {
-            get { return this.conversationParts[this.currentConvPart]; }
-        }
-
-        public Conversation()
-        {
-            conversationParts = new List<ConversationPart>();
-        }
-
-        public void Reset()
-        {
-            currentConvPart = 0;
-        }
-
-        public void AddConversationPart(string content, ConversationButton[] conversationButtons)
-        {
-            ConversationPart convPart = new ConversationPart(content, conversationButtons);
-            conversationParts.Add(convPart);
-        }
-    }
-    public class ConversationPart
-    {
-        public string text;
-
-        public ConversationButton[] conversationButtons;
-
-        public ConversationPart(string text, ConversationButton[] conversationButtons)
-        {
-            this.text = text;
-            this.conversationButtons = conversationButtons;
-        }
-    }
-    public class ConversationButton
-    {
-        public string displayName;
-        public string actions;
-
-        public ConversationButton(string displayName, string actions)
-        {
-            this.displayName = displayName;
-            this.actions = actions;
-        }
-    }
-
-    public interface IQuest
-    {        
-        QuestStage[] Stages { get; set; }
-        int CurrentStage { get; set; }
-        //void NextStage();
-        void CompleteQuest();
-        //void CancelQuest();
-        void StartQuest();
-        void Reset();
+	    public object Clone()
+	    {
+		    return this.MemberwiseClone();
+	    }
     }
 }
