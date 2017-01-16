@@ -24,18 +24,18 @@ namespace AdaptableQuesting.UI
         }
     }
 
-    public class QuestLogUI : UIState
+    internal class QuestLogUI : UIState
     {
-        public UIPanel questLogPanel;
-        public UIPanel questContainerPanel;
-        public UIPanel questDataPanel;
+        internal UIPanel questLogPanel;
+        internal UIPanel questContainerPanel;
+        internal UIPanel questDataPanel;
 
-        public UIMessageBox descriptionText;
+        internal UIMessageBox descriptionText;
 
-        public UIList questContainer;
-        public FixedUIScrollbar questScrollbar;
+        internal UIList questContainer;
+        internal FixedUIScrollbar questScrollbar;
 
-        public static bool visible = false;
+        internal static bool visible = false;
 
         internal const float questLogPanelWidth = 540;
         internal const float questLogPanelHeight = 320;
@@ -109,7 +109,7 @@ namespace AdaptableQuesting.UI
         /// <summary>
         /// Called whenever the player opens the QuestLogUI screen.
         /// </summary>
-        public void RecalculateQuests(QuestPlayer player)
+        internal void RecalculateQuests(QuestPlayer player)
         {
             this.questContainer.Clear();
 
@@ -125,14 +125,14 @@ namespace AdaptableQuesting.UI
                     questUIPanel.OnClick += (s, e) =>
                     {
                         string textToSet = "";
-                        for (int q = 0; q <= player.currentQuests[questUIPanel.questID].currentQuestPart; ++q)
+                        for (int q = 0; q <= player.currentQuests[questUIPanel.questID].CurrentStage; ++q)
                         {
-                            if (!string.IsNullOrEmpty(player.currentQuests[questUIPanel.questID].questParts[q].description))
+                            if (!string.IsNullOrEmpty(player.currentQuests[questUIPanel.questID].Stages[q].description))
                             {
-                                textToSet += (q == player.currentQuests[questUIPanel.questID].currentQuestPart ? "> " : "< ") + player.currentQuests[questUIPanel.questID].questParts[q].description;
-                                if (q == player.currentQuests[questUIPanel.questID].currentQuestPart)
+                                textToSet += (q == player.currentQuests[questUIPanel.questID].CurrentStage ? "> " : "< ") + player.currentQuests[questUIPanel.questID].Stages[q].description;
+                                if (q == player.currentQuests[questUIPanel.questID].CurrentStage)
                                 {
-                                    foreach (QuestPartElement qpe in player.currentQuests[questUIPanel.questID].questParts[q].killsNeeded)
+                                    foreach (QuestPartElement qpe in player.currentQuests[questUIPanel.questID].Stages[q].killsNeeded)
                                     {
                                         string name;
                                         if (qpe.type != 0) name = Lang.npcName(qpe.type);
@@ -158,12 +158,12 @@ namespace AdaptableQuesting.UI
 
     internal class QuestUIPanel : UIPanel
     {
-        public UIText nameUIText;
+        internal UIText nameUIText;
 
-        public string name = "";
-        public string description = "";
+        internal string name = "";
+        internal string description = "";
 
-        public int questID;
+        internal int questID;
 
         internal const float panelWidth = 224;
         internal const float panelHeight = 50;
@@ -190,7 +190,7 @@ namespace AdaptableQuesting.UI
 		}
     }
 
-    public class FixedUIScrollbar : UIScrollbar
+    internal class FixedUIScrollbar : UIScrollbar
     {
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {

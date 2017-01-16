@@ -24,7 +24,7 @@ namespace AdaptableQuesting.Entities
                 {
                     if (p.currentQuests[i] != null)
                     {
-                        QuestPart part = p.currentQuests[i].CurrentPart;
+                        QuestStage part = p.currentQuests[i].CurrentStageObject;
                         foreach(QuestPartElement element in part.killsNeeded)
                         {
                             if (element.currentAmount < element.amount)

@@ -40,7 +40,7 @@ namespace AdaptableQuesting
 
         public override void Load()
         {
-            instance = this;
+            instance = this;            
 
             chatQuestUI = new NPCChatQuestUI();
 
@@ -55,11 +55,6 @@ namespace AdaptableQuesting
                 questLogInterface = new UserInterface();
                 questLogInterface.SetState(questLogGUI);
             }
-        }
-
-        public override void PostSetupContent()
-        {
-
         }
 
         public override void ModifyInterfaceLayers(List<MethodSequenceListItem> layers)
@@ -184,7 +179,7 @@ namespace AdaptableQuesting
                 Quest quest = qp.currentQuests[i];
                 if (quest != null && !quest.invalid)
                 {
-                    if (quest.questParts[quest.currentQuestPart].conversations.ContainsKey(npc.type))
+                    if (quest.CurrentStageObject.conversations.ContainsKey(npc.type))
                     {
                         q.Add(quest);
                     }
@@ -238,7 +233,7 @@ namespace AdaptableQuesting
 
                     Quest quest = qp.currentQuests[i];
                     // If the given NPC is present in the currentQuestPart conversations list.
-                    if (quest.questParts[quest.currentQuestPart].conversations.ContainsKey(Main.npc[n].type))
+                    if (quest.Stages[quest.CurrentStage].conversations.ContainsKey(Main.npc[n].type))
                     {
                         // If the given QuestPart is ready to be finished, we want to set it so and break out of the loop.
                         if (quest.CurrentQuestPartFinished())

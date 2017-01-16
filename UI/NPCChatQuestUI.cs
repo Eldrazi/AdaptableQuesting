@@ -41,7 +41,7 @@ namespace AdaptableQuesting.UI
                 if (!selectedQuest.isActive)
                     conv = selectedQuest.introConversation;
                 else
-                    conv = selectedQuest.questParts[selectedQuest.currentQuestPart].conversations[Main.npc[Main.player[Main.myPlayer].talkNPC].type];
+                    conv = selectedQuest.CurrentStageObject.conversations[Main.npc[Main.player[Main.myPlayer].talkNPC].type];
                    
                 questUIHeight = conv.conversationParts[conv.currentConvPart].conversationButtons.Length + 1;
             }
@@ -118,10 +118,10 @@ namespace AdaptableQuesting.UI
                             }
                             else
                             {
-                                conv = selectedQuest.CurrentPart.conversations[Main.npc[Main.player[Main.myPlayer].talkNPC].type];
+                                conv = selectedQuest.CurrentStageObject.conversations[Main.npc[Main.player[Main.myPlayer].talkNPC].type];
                                 if (!selectedQuest.CurrentQuestPartFinished())
                                 {
-                                    Main.npcChatText = selectedQuest.CurrentPart.partUnfinishedText;
+                                    Main.npcChatText = selectedQuest.CurrentStageObject.partUnfinishedText;
                                     selectedQuest = null;
                                     return;
                                 }
@@ -143,7 +143,7 @@ namespace AdaptableQuesting.UI
                     if (!selectedQuest.isActive)
                         conv = selectedQuest.introConversation;
                     else
-                        conv = selectedQuest.questParts[selectedQuest.currentQuestPart].conversations[Main.npc[Main.player[Main.myPlayer].talkNPC].type];
+                        conv = selectedQuest.CurrentStageObject.conversations[Main.npc[Main.player[Main.myPlayer].talkNPC].type];
                     int selectedButton = -1;
 
                     for (int i = 0; i < conv.CurrentPart.conversationButtons.Length; ++i)
@@ -230,15 +230,15 @@ namespace AdaptableQuesting.UI
                                     }
                                     else if (action == "questpartup")
                                     {
-                                        selectedQuest.currentQuestPart++;
+                                        selectedQuest.CurrentStage++;
                                         /*conv = selectedQuest.questParts[selectedQuest.currentQuestPart].conversations[Main.npc[Main.player[Main.myPlayer].talkNPC].type];
                                         Main.npcChatText = conv.CurrentPart.text;*/
                                     }
                                     else if (action == "removeitems")
                                     {
-                                        if (selectedQuest.CurrentPart.itemsNeeded.Count > 0)
+                                        if (selectedQuest.CurrentStageObject.itemsNeeded.Count > 0)
                                         {
-                                            foreach (QuestPartElement element in selectedQuest.CurrentPart.itemsNeeded)
+                                            foreach (QuestPartElement element in selectedQuest.CurrentStageObject.itemsNeeded)
                                             {
                                                 int amountToRemove = element.amount;
 

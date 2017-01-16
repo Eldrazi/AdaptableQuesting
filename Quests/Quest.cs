@@ -15,7 +15,7 @@ namespace AdaptableQuesting.Quests
 {
     public delegate bool QuestDelegate(Player p);
 
-    public class Quest
+    public class Quest : IQuest
     {
         /// <summary>
         /// Only true when a quest is invalid. Happens when a mod is still active in the players' quest list,
@@ -31,8 +31,8 @@ namespace AdaptableQuesting.Quests
 
         public bool repeatable;
 
-        public QuestPart[] questParts;
-        public int currentQuestPart;
+        public QuestStage[] Stages { get; set; }
+        public int CurrentStage { get; set; }
 
         /// <summary>
         /// A delegate that is called when the quest has been completed.
@@ -45,9 +45,9 @@ namespace AdaptableQuesting.Quests
         public int introNPC;
         public Conversation introConversation;
 
-        public QuestPart CurrentPart
+        public QuestStage CurrentStageObject
         {
-            get { return this.questParts[this.currentQuestPart]; }
+            get { return this.Stages[this.CurrentStage]; }
         }
 
         public Quest(string id, string name, string modName, string description)
@@ -62,7 +62,7 @@ namespace AdaptableQuesting.Quests
 
             this.repeatable = false;
 
-            this.questParts = new QuestPart[0];
+            this.Stages = new QuestStage[0];
 
             this.questCompleted = null;
         }
@@ -71,22 +71,27 @@ namespace AdaptableQuesting.Quests
             return this.MemberwiseClone() as Quest;
         }
 
+        public void StartQuest()
+        {
+
+        }
+
         public void AddQuest()
         {
             QuestManager.AddQuest(this);
         }
-        public int AddPart(QuestPart questPart)
+        public int AddStage(QuestStage questPart)
         {
-            int newPartIndex = questParts.Length;
-            QuestPart[] tempParts = new QuestPart[newPartIndex + 1];
+            int newPartIndex = Stages.Length;
+            QuestStage[] tempParts = new QuestStage[newPartIndex + 1];
 
-            for (int i = 0; i < questParts.Length; ++i)
+            for (int i = 0; i < Stages.Length; ++i)
             {
-                tempParts[i] = questParts[i];
+                tempParts[i] = Stages[i];
             }
 
             tempParts[newPartIndex] = questPart;
-            this.questParts = tempParts;
+            this.Stages = tempParts;
 
             return newPartIndex;
         }
@@ -116,14 +121,14 @@ namespace AdaptableQuesting.Quests
 
         public bool CurrentQuestPartFinished()
         {
-            foreach (QuestPartElement element in this.CurrentPart.killsNeeded)
+            foreach (QuestPartElement element in this.CurrentStageObject.killsNeeded)
             {
                 if (element.currentAmount != element.amount)
                 {
                     return false;
                 }
             }
-            foreach (QuestPartElement element in this.CurrentPart.itemsNeeded)
+            foreach (QuestPartElement element in this.CurrentStageObject.itemsNeeded)
             {
                 element.currentAmount = 0;
 
@@ -139,20 +144,20 @@ namespace AdaptableQuesting.Quests
                     return false;
             }
 
-            if (this.CurrentPart.partUnfinishedCheck != null)
-                return this.CurrentPart.partUnfinishedCheck(Main.player[Main.myPlayer]);
+            if (this.CurrentStageObject.partUnfinishedCheck != null)
+                return this.CurrentStageObject.partUnfinishedCheck(Main.player[Main.myPlayer]);
 
             return true;
         }
 
         public void Reset()
         {
-            this.currentQuestPart = 0;
+            this.CurrentStage = 0;
             this.isActive = false;
 
-            for (int i = 0; i < questParts.Length; ++i)
+            for (int i = 0; i < Stages.Length; ++i)
             {
-                foreach (QuestPartElement element in questParts[i].killsNeeded)
+                foreach (QuestPartElement element in Stages[i].killsNeeded)
                 {
                     element.currentAmount = 0;
                 }
@@ -160,7 +165,7 @@ namespace AdaptableQuesting.Quests
         }
     }
 
-    public class QuestPart
+    public class QuestStage
     {
         public string description;
 
@@ -180,7 +185,7 @@ namespace AdaptableQuesting.Quests
         public string partUnfinishedText;
         public QuestDelegate partUnfinishedCheck;
 
-        public QuestPart(string description)
+        public QuestStage(string description)
         {
             this.description = description;
 
@@ -253,5 +258,16 @@ namespace AdaptableQuesting.Quests
             this.displayName = displayName;
             this.actions = actions;
         }
+    }
+
+    public interface IQuest
+    {        
+        QuestStage[] Stages { get; set; }
+        int CurrentStage { get; set; }
+        //void NextStage();
+        void CompleteQuest();
+        //void CancelQuest();
+        void StartQuest();
+        void Reset();
     }
 }

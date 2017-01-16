@@ -95,8 +95,8 @@ namespace AdaptableQuesting.Entities
                     tc.Add("quest" + i, "empty");
                     continue;
                 }
-                string toWrite = currentQuests[i].id + "~" + currentQuests[i].modName + "~" + currentQuests[i].currentQuestPart;
-                foreach (QuestPartElement element in currentQuests[i].CurrentPart.killsNeeded)
+                string toWrite = currentQuests[i].id + "~" + currentQuests[i].modName + "~" + currentQuests[i].CurrentStage;
+                foreach (QuestPartElement element in currentQuests[i].CurrentStageObject.killsNeeded)
                 {
                     toWrite += "~" + element.type + ";" + element.currentAmount;
                 }
@@ -135,11 +135,11 @@ namespace AdaptableQuesting.Entities
                 {
                     this.currentQuests[i].isActive = true;
                 }
-                this.currentQuests[i].currentQuestPart = int.Parse(data[2]);
+                this.currentQuests[i].CurrentStage = int.Parse(data[2]);
                 for (int n = 3; n < data.Length; ++n)
                 {
                     string[] typeAndAmount = data[n].Split(';');
-                    this.currentQuests[i].CurrentPart.killsNeeded.ElementAt(n - 3).currentAmount = int.Parse(typeAndAmount[1]);
+                    this.currentQuests[i].CurrentStageObject.killsNeeded.ElementAt(n - 3).currentAmount = int.Parse(typeAndAmount[1]);
                 }
             }
 
