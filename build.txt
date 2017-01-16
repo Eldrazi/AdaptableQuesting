@@ -1,0 +1,7 @@
+﻿author = Iriazul
+version = 1.0
+displayName = Adaptable Questing
+hideCode = true
+hideResources = true
+includeSource = false
+buildIgnore = *.csproj, *.user, obj\*, bin\*, .vs\*
