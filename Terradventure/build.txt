@@ -1,0 +1,8 @@
+﻿author = Iriazul
+version = 0.1
+displayName = Terradventure
+hideCode = true
+hideResources = true
+includeSource = false
+buildIgnore = *.csproj, *.user, obj\*, bin\*, .vs\*
+modReferences = AdaptableQuesting
