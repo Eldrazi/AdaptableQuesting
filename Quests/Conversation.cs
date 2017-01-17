@@ -12,7 +12,7 @@ namespace AdaptableQuesting.Quests
 		public int currentConvPart { get; set; }
 		public List<ConversationPart> conversationParts { get; set; }
 
-		ConversationPart IConversation.CurrentPart
+		public ConversationPart CurrentPart
 		{
 			get { return this.conversationParts[this.currentConvPart]; }
 			set { }

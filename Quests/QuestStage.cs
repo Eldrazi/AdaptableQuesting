@@ -7,7 +7,7 @@ using AdaptableQuesting.Interfaces;
 
 namespace AdaptableQuesting.Quests
 {
-	public class QuestStage : IQuestStage, ICloneable
+	public class QuestStage : IQuestStage
 	{
 		public string description;
 

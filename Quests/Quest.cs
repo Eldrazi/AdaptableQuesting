@@ -16,7 +16,7 @@ namespace AdaptableQuesting.Quests
 {
     public delegate bool QuestDelegate(Player p);
 
-    public class Quest : IQuest, ICloneable
+    public class Quest : IQuest
     {
         /// <summary>
         /// Only true when a quest is invalid. Happens when a mod is still active in the players' quest list,
@@ -46,7 +46,10 @@ namespace AdaptableQuesting.Quests
         public int introNPC;
         public Conversation introConversation;
 
-        public QuestStage CurrentStageObject => this.Stages[this.CurrentStage];
+        public QuestStage CurrentStageObject
+        {
+            get { return this.Stages[this.CurrentStage]; }
+        }
 
 	    public Quest(string id, string name, string modName, string description)
         {
